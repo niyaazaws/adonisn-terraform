@@ -2,4 +2,4 @@ bucket = "seemat-s3-qa"
 key    = "qa/terraform.tfstate"
 region = "af-south-1"
 encrypt = true
-#use_lockfile = true
+use_lockfile = true # S3 native state locking (Terraform 1.10+)

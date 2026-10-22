@@ -5,3 +5,6 @@
 *.tfplan
 tfplan
 plan_output.txt
+# Terraform debug logs
+*.log
+*-log.json
