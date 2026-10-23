@@ -88,6 +88,15 @@ Backend state 'prod/terraform.tfstate' does not match environment 'dev'.
 ```
 Nothing is changed. Fix it by running `init -reconfigure` with the right `.tfbackend`.
 
+## Evidence
+Each environment planned on its own, against its own state bucket (account ID blanked out):
+- `evidence/plan-dev.txt` – dev: 14 to add, `adonis-n-eks-dev`, t3.small
+- `evidence/plan-qa.txt` – qa: 14 to add, `adonis-n-eks-qa`, t3.medium
+- `evidence/plan-prod.txt` – prod: 14 to add, `adonis-n-eks-prod`, t3.large
+- `evidence/safety-guard.txt` – prod state + dev values = blocked
+
+dev was also applied end to end (cluster ACTIVE, nginx reachable on port 30007), then destroyed. Everything has been torn down so nothing costs money.
+
 ## Assumptions, trade-offs and limitations
 - **Default VPC** – assumes the account has one (it does in af-south-1). Simpler and cheaper, but all environments share one VPC; separation is by subnet, not by network.
 - **Public subnets, no NAT gateway** – nodes get public IPs so they can reach the internet. Saves the NAT cost (~$30+/month each) but is less secure than private subnets. For real prod, use private subnets + NAT.

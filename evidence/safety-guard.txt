@@ -1,0 +1,14 @@
+# Safety guard test: state initialised for PROD, plan run with dev.tfvars
+$ terraform init -reconfigure -backend-config=envs/prod/prod.tfbackend
+$ terraform plan -var-file=envs/dev/dev.tfvars
+
+Error: Resource precondition failed
+
+  on safety.tf line 11, in data "aws_caller_identity" "guard":
+  11:       condition     = local.backend_key == null || startswith(local.backend_key, "${var.environment}/")
+    ├────────────────
+    │ local.backend_key is "prod/terraform.tfstate"
+    │ var.environment is "dev"
+
+Backend state 'prod/terraform.tfstate' does not match environment 'dev'. Run:
+terraform init -reconfigure -backend-config=envs/dev/dev.tfbackend
