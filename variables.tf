@@ -18,12 +18,6 @@ variable "environment" {
   }
 }
 
-variable "enable_versioning" {
-  type        = bool
-  description = "Whether to enable versioning on the S3 bucket (S3 module)"
-  default     = false
-}
-
 variable "kubernetes_version" {
   type        = string
   description = "EKS Kubernetes version, e.g. 1.37. Upgrade one minor version at a time"

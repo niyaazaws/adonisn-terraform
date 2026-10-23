@@ -1,7 +1,6 @@
-environment       = "dev"
-enable_versioning = false
-surname           = "adonis"
-initial           = "n"
+environment = "dev"
+surname     = "adonis"
+initial     = "n"
 
 # EKS subnets in the default VPC (AZ => CIDR) - unique per environment
 subnet_cidrs = {
@@ -11,7 +10,7 @@ subnet_cidrs = {
 }
 
 # Worker nodes (EC2)
-instance_type     = "t3.medium"
+instance_type     = "t3.small" # smallest that runs EKS - keeps dev cheap
 capacity_type     = "ON_DEMAND"
 node_min_size     = 1
 node_max_size     = 3

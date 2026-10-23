@@ -1,7 +1,6 @@
-environment       = "qa"
-enable_versioning = true
-surname           = "adonis"
-initial           = "n"
+environment = "qa"
+surname     = "adonis"
+initial     = "n"
 
 # EKS subnets in the default VPC (AZ => CIDR) - unique per environment
 subnet_cidrs = {
@@ -11,7 +10,7 @@ subnet_cidrs = {
 }
 
 # Worker nodes (EC2)
-instance_type     = "t3.medium"
+instance_type     = "t3.medium" # same as prod-like testing, but cheaper
 capacity_type     = "ON_DEMAND"
 node_min_size     = 1
 node_max_size     = 3

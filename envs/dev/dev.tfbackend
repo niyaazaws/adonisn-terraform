@@ -1,4 +1,4 @@
-bucket = "seemat-s3-dev"
+bucket = "adonisn-s3-dev"
 key    = "dev/terraform.tfstate"
 region = "af-south-1"
 encrypt = true

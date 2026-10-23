@@ -1,6 +1,6 @@
 # How to access EKS
 
-Run these after `terraform apply` has finished.
+Run these after `terraform apply` has finished. Examples use dev – swap `dev` for `qa` or `prod`.
 
 1. **Go to the project folder**
    ```bash
@@ -45,7 +45,7 @@ Run these after `terraform apply` has finished.
 9. **Clean up when done** (EKS costs money every hour)
    ```bash
    kubectl delete -f k8s/nginx.yaml
-   cd modules/capitec_eks && terraform destroy
+   terraform destroy -var-file=envs/dev/dev.tfvars
    ```
 
 ## Note

@@ -1,37 +1,52 @@
+# S3 bucket for Terraform remote state - one per environment.
+# Used by bootstrap/state-buckets (see README "Remote state").
 
-#Change this variable so that the prefix follows the format <surname><first_initial>"
+# Prefix follows the format <surname><first_initial>
 variable "prefix" {
   type        = string
   description = "distinguishing prefix for resource arguments which identifies the owner <surname><first_initial>"
-  default     = "seemat"
+  default     = "adonisn"
 }
 
-#TODO: Create another variable for the environment name.
 variable "environment" {
   type        = string
   description = "Name of the environment"
 }
 
-#TODO: Create another variable for the versioning requirement
 variable "enable_versioning" {
   type        = bool
   description = "Whether to enable versioning for the S3 bucket"
 }
 
-#TODO: Create a local called bucket_name which follows the format <prefix>-s3-<environment_name>
+# Bucket name follows the format <prefix>-s3-<environment_name>, e.g. adonisn-s3-dev
 locals {
   bucket_name = "${var.prefix}-s3-${var.environment}"
 }
-#TODO: Use local.bucket_name in the bucket argument of the aws_s3_bucket resource.
+
 resource "aws_s3_bucket" "my_bucket" {
   bucket        = local.bucket_name
-  force_destroy = true
+  force_destroy = true # lets terraform destroy empty out old state versions
 }
 
+# Versioning keeps old copies of the state file so a bad apply can be rolled back
+resource "aws_s3_bucket_versioning" "my_bucket" {
+  bucket = aws_s3_bucket.my_bucket.id
 
+  versioning_configuration {
+    status = var.enable_versioning ? "Enabled" : "Disabled"
+  }
+}
 
-#TODO: Supply a value for the environment name variable via CLI flag -var="environment=<value>"
-#clean up
+# State files can hold sensitive values - never public
+resource "aws_s3_bucket_public_access_block" "my_bucket" {
+  bucket                  = aws_s3_bucket.my_bucket.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
 
-#TODO: Create dev.tfvars, qa.tfvars, and prod.tfvars files with appropriate values for the environment variable.
-#apply and cleanup for the different environments using the -var-file flag.
+output "bucket_name" {
+  description = "Name of the state bucket"
+  value       = aws_s3_bucket.my_bucket.bucket
+}
